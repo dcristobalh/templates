@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-reader
+  namespace: default
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: reader-cr
+rules:
+- verbs: ["get", "list", "watch"]
+  resources: 
+  - namespaces
+  - services
+  - endpoints
+  - pods
+  - deployments
+  - configmaps
+  - jobs
+  - cronjobs
+  - daemonsets
+  - statefulsets
+  - replicasets
+  - persistentvolumes
+  apiGroups: ["","apps","batch"]
+- verbs: ["create", "delete"]
+  resources: ["pods"]
+  apiGroups: [""]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-nginx-role-binding
+  namespace: nginx
+subjects:
+- kind: ServiceAccount
+  name: sa-reader
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: reader-cr
+  apiGroup: rbac.authorization.k8s.io
