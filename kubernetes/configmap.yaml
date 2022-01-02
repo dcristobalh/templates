@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-test
+  labels:
+    name: configmap-test
+  namespace: test
+data:
+  config: |-
+    ---
+    :verbose: true
+    :environment: staging
+    :pidfile: tmp/pids/sidekiq.pid
+    :logfile: log/sidekiq.log
+    :concurrency: 20
+    :queues:
+      - [default, 1]
+    :dynamic: true
+    :timeout: 300
